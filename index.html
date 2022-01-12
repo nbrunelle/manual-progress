@@ -280,20 +280,43 @@ updateColor('#D8E9A8');
         }
         $('.notes_container').append('<div id="n_' + note_id + '" class="n_elem">' +  text  + ' <span class="close" onclick="closeNote(' + note_id + ')">&times;</span></div>')
         note_id += 1
+        saveRemote()
       }
 
       function retrieveNotes() {
-        let cookies = Cookies.get()
-        console.log(cookies)
-        for (const [key, value] of Object.entries(cookies)) {
-          console.log(`${key}: ${value}`);
-          addNote(false, value)
-        }
+        let cookies 
+         $.ajax({
+          url:'http://nicolasbrunelle.com/data.php',
+          type: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            console.log(response)
+              cookies = response
+            for (const [key, value] of Object.entries(cookies)) {
+              console.log(`${key}: ${value}`);
+              addNote(false, value)
+              note_id += 1 
+            }
+          }
+        })
+        // let cookies = Cookies.get()
       }
 
       function closeNote(id) {
         $('#n_' + id).remove()
         Cookies.remove(id)
+        saveRemote()
+      }
+
+      function saveRemote() {
+        $.ajax({
+          url:'http://nicolasbrunelle.com/data.php',
+          data: Cookies.get(),
+          headers: {  'Access-Control-Allow-Origin': '*' }, 
+          crossDomain: true,
+          // dataType: 'jsonp',
+          type: 'POST'
+        })
       }
 
     $(document).keyup(function(){
