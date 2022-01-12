@@ -176,7 +176,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-colorpicker@3.4.0/dist/js/bootstrap-colorpicker.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.css" integrity="sha512-HcfKB3Y0Dvf+k1XOwAD6d0LXRFpCnwsapllBQIvvLtO2KMTa0nI5MtuTv3DuawpsiA0ztTeu690DnMux/SuXJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+  </head>
 <body>
     <div style='height:100%; align-items: center; flex-direction: column; display: flex; mix-blend-mode: exclusion; color: white;' class="container text-center flex">
             <div  style="margin: auto; width: 80%; margin-bottom: 60px;">
@@ -262,17 +263,37 @@ updateColor('#D8E9A8');
       // }
       updateColor(this.value)
     });
+
+    retrieveNotes()
     
     
   });
   
-      function addNote() {
-        $('.notes_container').append('<div id="n_' + note_id + '" class="n_elem">' +  $('#note-text').val()  + ' <span class="close" onclick="closeNote(' + note_id + ')">&times;</span></div>')
+      function addNote(create = true, cookie) {
+        let text 
+        if(create){
+          text = $('#note-text').val()
+          Cookies.set(note_id, text)
+        }else{
+          text = cookie
+          console.log("test" +  text);
+        }
+        $('.notes_container').append('<div id="n_' + note_id + '" class="n_elem">' +  text  + ' <span class="close" onclick="closeNote(' + note_id + ')">&times;</span></div>')
         note_id += 1
+      }
+
+      function retrieveNotes() {
+        let cookies = Cookies.get()
+        console.log(cookies)
+        for (const [key, value] of Object.entries(cookies)) {
+          console.log(`${key}: ${value}`);
+          addNote(false, value)
+        }
       }
 
       function closeNote(id) {
         $('#n_' + id).remove()
+        Cookies.remove(id)
       }
 
     $(document).keyup(function(){
