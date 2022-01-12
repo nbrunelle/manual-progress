@@ -67,16 +67,16 @@
     -webkit-animation-delay: 0.2s;
             animation-delay: 0.2s; }
 
-            
+
   label, input{
     font-weight: 600;
   }
-  label{
+  span {
     mix-blend-mode: difference;
   }
 .clock {
-  width: 15rem;
-  height: 15rem;
+  width: 12rem;
+  height: 12rem;
   position: relative;
   margin-bottom: 50px;
 }
@@ -154,6 +154,20 @@
   width: 45%;
   height: 2px;
 }
+
+.form-control {
+  width: 20%;
+}
+
+.n_elem{
+  border: 1px white solid;
+  padding: 15px;
+  margin: 5px;
+  text-align: left;
+}
+.close {
+  color: white !important;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -176,14 +190,29 @@
                         </span>
                     </div>
                 </div><br>
-                <div class="md-col-5" style="width: 20%; margin: auto; ">
-                    <label for="total">To do</label>
-                    <input id='total' onchange='update()' type="number"  class="form-control" name="total" value="100"><br>
-                    <label for="done">Done</label>
-                    <input id='done' onchange='update()' type="number" class="form-control" name="done" id="" value="0"><br>
+                <div class="md-col-5" style="margin: auto; ">
+                  <div style="display: flex;justify-content: space-evenly">
+                    <div>
+                      <label for="total">To do</label>
+                      <input id='total' onchange='update()' type="number"  class="form-control" name="total" value="100"><br>
+                    </div>
+                    <div>
+                      <label for="done">Done</label>
+                      <input id='done' onchange='update()' type="number" class="form-control" name="done" id="" value="0"><br>
+                    </div>
+                  </div>
                     <label for="color">Color</label>
-                    <input type="text" onkeyup="updateColor(this.value)" name="color" id="color" class="form-control input-lg" value="#D8E9A8"/>
-                </div>
+                    <input type="text" onkeyup="updateColor(this.value)" style="width: 20%;margin: auto;" name="color" id="color" class="form-control input-lg" value="#D8E9A8"/>
+                  <br>
+                    <div class="notes">
+                      <div style="display: flex;">
+                        <input type="text" id='note-text' class="form-control"><br>
+                        <input type="button" onclick="addNote()" class="form-control" style="width: auto; margin-left: 5px;" value="&plus; Add note">
+                      </div>
+
+                    <div class="notes_container"></div>
+                  </div>
+                  </div>
             </div>
             <div class="clock">
               <div class="outer-clock-face">
@@ -197,6 +226,7 @@
 </script>
 </body>
 <script>
+  let note_id = 0;
   $(document).ready(function() {
     const minsHand = document.querySelector('.min-hand');
     const hourHand = document.querySelector('.hour-hand');
@@ -232,10 +262,18 @@ updateColor('#D8E9A8');
       // }
       updateColor(this.value)
     });
-
+    
+    
   });
   
+      function addNote() {
+        $('.notes_container').append('<div id="n_' + note_id + '" class="n_elem">' +  $('#note-text').val()  + ' <span class="close" onclick="closeNote(' + note_id + ')">&times;</span></div>')
+        note_id += 1
+      }
 
+      function closeNote(id) {
+        $('#n_' + id).remove()
+      }
 
     $(document).keyup(function(){
       update()
@@ -254,5 +292,7 @@ updateColor('#D8E9A8');
       console.log(color)
       $('body').css('background-color', color )
     }
+
+
 </script>
 </html>
