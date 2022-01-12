@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Manual progression</title>
     <style>
         html, body {
             height: 100%;
@@ -66,6 +66,93 @@
   .coffee div:nth-child(3) {
     -webkit-animation-delay: 0.2s;
             animation-delay: 0.2s; }
+
+
+            label, input{
+              /* mix-blend-mode: difference; */
+              font-weight: 600;
+              /* text-shadow: 1px 1px white, -1px -1px; */
+            }
+.clock {
+  width: 15rem;
+  height: 15rem;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.outer-clock-face {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+
+.outer-clock-face::after {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  transform: rotate(90deg)
+}
+
+.outer-clock-face::after,
+.outer-clock-face::before,
+.outer-clock-face .marking{
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: white;
+  z-index: 0;
+  left: 49%;
+}
+
+.outer-clock-face .marking {
+  background: white;
+  width: 2px;
+}
+
+.inner-clock-face {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background: black;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  z-index: 1;
+}
+
+.hand {
+  width: 50%;
+  right: 50%;
+  height: 4px;
+  background: white;
+  position: absolute;
+  top: 50%;
+  border-radius: 6px;
+  transform-origin: 100%;
+  transform: rotate(90deg);
+  transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+}
+
+.hand.hour-hand {
+  width: 30%;
+  z-index: 3;
+}
+
+.hand.min-hand {
+  height: 3px;
+  z-index: 10;
+  width: 40%;
+}
+
+.hand.second-hand {
+  background: white;
+  width: 45%;
+  height: 2px;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -73,64 +160,98 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-colorpicker@3.4.0/dist/js/bootstrap-colorpicker.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.css" integrity="sha512-HcfKB3Y0Dvf+k1XOwAD6d0LXRFpCnwsapllBQIvvLtO2KMTa0nI5MtuTv3DuawpsiA0ztTeu690DnMux/SuXJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <div style='height:100%; align-items: center; flex-direction: column; display: flex;' class="container text-center flex">
-            <div  style="margin: auto; width: 80%;">
-                <div class="icon" style="margin: auto;">
+    <div style='height:100%; align-items: center; flex-direction: column; display: flex; mix-blend-mode: exclusion; color: white;' class="container text-center flex">
+            <div  style="margin: auto; width: 80%; margin-bottom: 60px;">
+                <div class="icon" style="margin: auto; ">
                     <div class="coffee" style="margin:auto"><div></div><div></div><div></div></div>
                 </div><br>
                 <div class="progress" style="height: 30px;">
-                    <div style="mix-blend-mode: color-burn" class="progress-bar bg-dark progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div style="" class="progress-bar progress-bar-striped bg-dark progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                         <span id="percent" style="font-size: large;font-weight: bolder;">
 
                         </span>
                     </div>
                 </div><br>
-                <div class="md-col-5" style="width: 20%; margin: auto;">
+                <div class="md-col-5" style="width: 20%; margin: auto; ">
                     <label for="total">To do</label>
-                    <input id='total' type="number"  class="form-control" name="total" value="100"><br>
+                    <input id='total' onchange='update()' type="number"  class="form-control" name="total" value="100"><br>
                     <label for="done">Done</label>
-                    <input id='done' type="number" class="form-control" name="done" id="" value="0"><br>
+                    <input id='done' onchange='update()' type="number" class="form-control" name="done" id="" value="0"><br>
                     <label for="color">Color</label>
                     <input type="text" onkeyup="updateColor(this.value)" name="color" id="color" class="form-control input-lg" value="#D8E9A8"/>
                 </div>
+            </div>
+            <div class="clock">
+              <div class="outer-clock-face">
+                <div class="inner-clock-face">
+                </div>
+                    <div class="hand hour-hand"></div>
+                    <div class="hand min-hand"></div>
+              </div>
             </div>
         </div>
 </script>
 </body>
 <script>
-    // $('#color ').colorpicker();
+  $(document).ready(function() {
+    const minsHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+ function setDate() {
+  const now = new Date();
+
+  const seconds = now.getSeconds();
+  const mins = now.getMinutes();
+  const minsDegrees = ((mins / 60) * 360) + ((seconds/60)*6) + 90;
+  minsHand.style.transform = `rotate(${minsDegrees}deg)`;
+
+  const hour = now.getHours();
+  const hourDegrees = ((hour / 12) * 360) + ((mins/60)*30) + 90;
+  hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+}
+
+setInterval(setDate, 1000);
+
+setDate();
+updateColor('#D8E9A8');
+  // var darkmode =  new Darkmode(
+  //   {
+  //       label: '🌓',
+  //       backgroundColor: '#D8E9A8',  
+  //       mixColor: '#D8E9A8'
+  //   }
+  //   )
+    // darkmode.showWidget();
+    
+    $('#color').colorpicker().on('colorpickerChange', function (e) {
+      // if(darkmode.isActivated()){
+      //   darkmode.toggle()
+      // }
+      updateColor(this.value)
+    });
+
+  });
+  
+
+
     $(document).keyup(function(){
+      update()
+    });
+
+    function update() {
         total = $('#total').val()
         done = $('#done').val()
         percent = (done / total) * 100
         $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent)
         $('#percent').text(percent.toFixed(2) + "%")
         console.log('percent = ' + percent)
-    });
+    }
 
     function updateColor(color) {
-        const darkmode =  new Darkmode(
-            {
-                backgroundColor: color
-            }
-            );
-        }
-    function addDarkmodeWidget() {
-    new Darkmode(
-    {
-        label: '🌓',
-        backgroundColor: '#D8E9A8',  
-        mixColor: '#D8E9A8'
+      console.log(color)
+      $('body').css('background-color', color )
     }
-    ).showWidget();
-  }
-  window.addEventListener('load', addDarkmodeWidget);
-
-
-
-
-    
 </script>
 </html>
