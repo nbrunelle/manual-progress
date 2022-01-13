@@ -305,7 +305,7 @@ updateColor('#D8E9A8');
 
       function retrieveNotes() { 
          $.ajax({
-          url:'http://nicolasbrunelle.com/data.php',
+          url:'https://nicolasbrunelle.com/data.php',
           type: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -337,7 +337,7 @@ updateColor('#D8E9A8');
 
       function saveRemote() {
         $.ajax({
-          url:'http://nicolasbrunelle.com/data.php',
+          url:'https://nicolasbrunelle.com/data.php',
           data: Cookies.get(),
           headers: {  'Access-Control-Allow-Origin': '*' }, 
           crossDomain: true,
