@@ -253,7 +253,12 @@ function checkMessage() {
 
 
 setDate();
-updateColor('#D8E9A8');
+let color = hslToHex();
+$('#color').val(color)
+console.log(color)
+updateColor( color );
+// updateColor('#D8E9A8');
+
   // var darkmode =  new Darkmode(
   //   {
   //       label: '🌓',
@@ -363,7 +368,38 @@ updateColor('#D8E9A8');
       console.log(color)
       $('body').css('background-color', color )
     }
+    function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+    function randomNum() {
+      return Math.floor(Math.random() * 360);
+    }
 
+    function limitRandom(l, h) {
+      var r = h - l;
+      return Math.floor(Math.random() * r) + l;
+    }
 
+    function hslToHex() {
+      var l = 50 / 100;
+      var s = limitRandom(65, 100);
+      console.log('s = ' + s)
+      const a = limitRandom(65, 100) * Math.min(l, 1 - l) / 100;
+      const f = n => {
+        const k = (n + randomNum() / 30) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+    
+    function randomRGB() {
+      var red = randomNum();
+      var green = randomNum();
+      var blue = randomNum();
+      return '#' + componentToHex(red) + componentToHex(green) + componentToHex(blue);
+    }
 </script>
 </html>
